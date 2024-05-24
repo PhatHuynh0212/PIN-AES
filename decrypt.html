@@ -1,0 +1,18 @@
+<div id="decrypt" class="tab-content hidden">
+    <h3 class="text-3xl font-semibold mb-8 underline">Decrypt PIN</h3>
+    <div class="form-group relative mb-5">
+        <input
+            type="text"
+            id="encrypted-pin"
+            class="floating-input w-full p-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+            required
+            placeholder=" "
+        />
+        <label for="encrypted-pin" class="floating-label">Encrypted PIN</label>
+    </div>
+    <button id="decrypt-btn" class="btn bg-green-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-green-700 transition duration-200">Decrypt</button>
+    <div class="result mt-4 tooltip" id="decrypt-result"></div>
+    <button id="confirm-btn" class="btn bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 hidden mt-4">Confirm</button>
+    <div id="loading" class="loader"></div>
+    <!-- Loading spinner -->
+</div>
