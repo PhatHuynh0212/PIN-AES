@@ -306,36 +306,6 @@ let AES = {
     },
 };
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".list-group-item").forEach((tab) => {
-        tab.addEventListener("click", function () {
-            showTab(this.getAttribute("data-tab"));
-        });
-    });
-    showTab("description");
-});
-
-function showTab(tabId) {
-    document.querySelectorAll(".tab-content").forEach((tabContent) => {
-        tabContent.classList.add("hidden");
-        tabContent.classList.remove("active");
-    });
-    const selectedTabContent = document.getElementById(tabId);
-    if (selectedTabContent) {
-        selectedTabContent.classList.remove("hidden");
-        selectedTabContent.classList.add("active");
-    }
-    document.querySelectorAll(".list-group-item").forEach((tab) => {
-        tab.classList.remove("bg-purple-700", "bg-pink-700", "bg-red-700");
-    });
-    const activeTab = document.querySelector(
-        `.list-group-item[data-tab="${tabId}"]`
-    );
-    if (activeTab) {
-        activeTab.classList.add("bg-purple-700");
-    }
-}
-
 function arrayToHex(array) {
     return Array.from(array)
         .map((b) => ("00" + b.toString(16)).slice(-2))
@@ -364,8 +334,7 @@ function uint8ArrayToString(array) {
 
 bankKey = "vietnambank12345"
 
-function encryptPin() {
-    const pin = document.getElementById("pin").value;
+function encryptPin(pin) {
     if (pin.length !== 6) {
         alert("Vui lòng nhập mã PIN có đúng 6 chữ số");
         return;
@@ -379,11 +348,7 @@ function encryptPin() {
     const encrypted = AES.cipher(textArray, expandedKey);
     const encryptedHex = arrayToHex(encrypted);
 
-    document.getElementById("key-value").textContent = arrayToHex(key);
-    document.getElementById("pin-value").textContent = encryptedHex;
-    document.querySelector(".result").classList.remove("hidden");
-    document.getElementById("copy-key-btn").classList.remove("hidden");
-    document.getElementById("copy-pin-btn").classList.remove("hidden");
+    return encryptedHex;
 }
 
 function decryptPin() {
@@ -401,6 +366,5 @@ function decryptPin() {
     const decryptedArray = AES.decipher(encryptedPin, expandedKey);
     const decryptedPin = uint8ArrayToString(decryptedArray);
 
-    const decryptResult = document.getElementById('decrypt-result');
-    decryptResult.innerHTML = `Mã PIN đã giải mã: ${decryptedPin}`;
+    return decryptedPin;
 }

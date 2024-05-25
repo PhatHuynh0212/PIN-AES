@@ -1,5 +1,5 @@
 let originalPin = "";
-let key = "vietnambank12345"
+let key = "vietnambank12345";
 
 document.addEventListener("DOMContentLoaded", function () {
     const atmCard = document.getElementById("atm-card");
@@ -52,11 +52,29 @@ for (let i = 0; i < 20; i++) {
             padding: CryptoJS.pad.Pkcs7,
         }
     ).toString();
-    plainPins.push(plainPins[i]);
     encryptedPins.push(encryptedPin);
 }
+
+const encryptedPinHex = [];
+
+function base64ToHex(base64) {
+    const raw = atob(base64);
+    let result = "";
+    for (let i = 0; i < raw.length; i++) {
+        const hex = raw.charCodeAt(i).toString(16);
+        result += hex.length === 2 ? hex : "0" + hex;
+    }
+    return result.toUpperCase();
+}
+
+for (let i = 0; i < 20; i++) {
+    const pinHex = base64ToHex(encryptedPins[i]);
+    encryptedPinHex.push(pinHex);
+}
+
 console.log("Danh sách mã PIN gốc:", plainPins);
-console.log("Danh sách mã PIN đã mã hóa:", encryptedPins);
+console.log("Danh sách mã PIN đã mã hóa (hex):", encryptedPinHex);
+console.log("Danh sách mã PIN đã mã hóa (base64):", encryptedPins);
 
 function loadContent(fileName) {
     return fetch(fileName)
@@ -243,7 +261,7 @@ function withdrawMoney() {
     const amount = document.getElementById("amount").value;
     document.getElementById(
         "withdraw-result"
-    ).textContent = `You have successfully withdrawn ${amount} units.`;
+    ).textContent = `You have successfully withdrawn ${amount} vnd.`;
 }
 
 function startSessionTimeout() {
