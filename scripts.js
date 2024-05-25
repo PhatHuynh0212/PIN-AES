@@ -90,6 +90,9 @@ function initializeTab(fileName) {
         document
             .getElementById("validate-btn")
             .addEventListener("click", validatePin);
+        document
+            .getElementById("toggle-pin-btn")
+            .addEventListener("click", togglePinVisibility);
     } else if (fileName === "decrypt.html") {
         document
             .getElementById("decrypt-btn")
@@ -101,6 +104,19 @@ function initializeTab(fileName) {
         document
             .getElementById("withdraw-btn")
             .addEventListener("click", withdrawMoney);
+    }
+}
+
+function togglePinVisibility() {
+    const pinInput = document.getElementById("pin");
+    const togglePinBtn = document.getElementById("toggle-pin-btn");
+
+    if (pinInput.type === "password") {
+        pinInput.type = "text";
+        togglePinBtn.textContent = "Hide PIN";
+    } else {
+        pinInput.type = "password";
+        togglePinBtn.textContent = "Show PIN";
     }
 }
 
@@ -259,9 +275,30 @@ function confirmPin() {
 
 function withdrawMoney() {
     const amount = document.getElementById("amount").value;
-    document.getElementById(
-        "withdraw-result"
-    ).textContent = `You have successfully withdrawn ${amount} vnd.`;
+    document.getElementById("withdraw-result").textContent = `You have successfully withdrawn ${amount} vnd.`;
+
+    // Show the restart button
+    const restartBtn = document.getElementById("restart-btn");
+    restartBtn.classList.remove("hidden");
+
+    // Add event listener to the restart button
+    restartBtn.addEventListener("click", function() {
+        resetAtmUI();
+    });
+}
+
+// Add a function to reset the ATM UI
+function resetAtmUI() {
+    document.getElementById("atm-container").style.display = "flex";
+    document.getElementById("main-content").classList.add("hidden");
+    document.getElementById("atm-card").classList.remove("inserted");
+    // Reset navigation tabs visibility
+    document.querySelector('.list-group-item[data-tab="decrypt"]').classList.add("hidden");
+    document.querySelector('.list-group-item[data-tab="withdraw"]').classList.add("hidden");
+    document.querySelector('.list-group-item[data-tab="pin-entry"]').classList.remove("hidden");
+    // Reset dynamic content
+    document.getElementById("dynamic-content").innerHTML = "";
+    // Optionally reset form fields and other states here if necessary
 }
 
 function startSessionTimeout() {
