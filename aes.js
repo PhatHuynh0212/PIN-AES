@@ -332,16 +332,11 @@ function uint8ArrayToString(array) {
     return String.fromCharCode.apply(null, array);
 }
 
-bankKey = "vietnambank12345"
+bankKey = "vietnambank12345";
 
 function encryptPin(pin) {
-    if (pin.length !== 6) {
-        alert("Vui lòng nhập mã PIN có đúng 6 chữ số");
-        return;
-    }
-
-    const key = stringToUint8Array(bankKey); // Ensure key is 16 bytes
     const textArray = stringToUint8Array(pin);
+    const key = stringToUint8Array(bankKey); // Ensure key is 16 bytes
     const keyArray = key.slice(0, 16); // Ensure key length matches block size (16 bytes)
     const expandedKey = AES.keyExpansion(keyArray);
 
@@ -352,14 +347,10 @@ function encryptPin(pin) {
 }
 
 function decryptPin() {
-    const encryptedPinHex = document.getElementById('encrypted-pin').value;
-    const keyHex = document.getElementById('key').value;
-    if (!encryptedPinHex || !keyHex) {
-        alert('Vui lòng nhập mã PIN đã mã hóa và Key');
-        return;
-    }
+    const encryptedPinHex = document.getElementById("encrypted-pin").value;
+
     const encryptedPin = hexToUint8Array(encryptedPinHex);
-    const key = hexToUint8Array(keyHex);
+    const key = hexToUint8Array(bankKey);
     const keyArray = key.slice(0, 16); // Ensure key length matches block size (16 bytes)
     const expandedKey = AES.keyExpansion(keyArray);
 

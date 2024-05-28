@@ -1,5 +1,4 @@
 let originalPin = "";
-let key = "vietnambank12345";
 
 document.addEventListener("DOMContentLoaded", function () {
     const atmCard = document.getElementById("atm-card");
@@ -16,18 +15,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
     startSessionTimeout();
 });
-const bankKey = CryptoJS.enc.Utf8.parse(key);
+
+function generateDynamicKey() {
+    const currentTimestamp = new Date().getTime().toString();
+    return CryptoJS.SHA256(currentTimestamp)
+        .toString(CryptoJS.enc.Hex)
+        .substring(0, 16); // lấy 16 ký tự đầu
+}
+
+let dynamicKey = generateDynamicKey();
+console.log("Khóa tự động AES-128: ", dynamicKey);
+const bankKey = CryptoJS.enc.Utf8.parse(dynamicKey); // Key used for both encryption and decryption
 
 // Generate 20 random PINs and encrypt them
-
-const plainPins = [
-    "562712", "189746", "773455", "376890", "876816",
-    "500047", "796123", "444852", "898621", "669447",
-    "214883", "501472", "747329", "697914", "743003",
-    "172037", "503986", "964266", "832879", "246066",
-];
-
 const encryptedPins = [];
+const plainPins = [
+    "562712",
+    "189746",
+    "773455",
+    "376890",
+    "876816",
+    "500047",
+    "796123",
+    "444852",
+    "898621",
+    "669447",
+    "214883",
+    "501472",
+    "747329",
+    "697914",
+    "743003",
+    "172037",
+    "503986",
+    "964266",
+    "832879",
+    "246066",
+]; // Store plain PINs for logging and testing
+
 for (let i = 0; i < 20; i++) {
     const encryptedPin = CryptoJS.AES.encrypt(
         CryptoJS.enc.Utf8.parse(plainPins[i]),
@@ -40,6 +64,8 @@ for (let i = 0; i < 20; i++) {
     encryptedPins.push(encryptedPin);
 }
 
+const encryptedPinHex = [];
+
 function base64ToHex(base64) {
     const raw = atob(base64);
     let result = "";
@@ -50,13 +76,11 @@ function base64ToHex(base64) {
     return result.toUpperCase();
 }
 
-const encryptedPinHex = [];
 for (let i = 0; i < 20; i++) {
     const pinHex = base64ToHex(encryptedPins[i]);
     encryptedPinHex.push(pinHex);
 }
 
-console.log("Khóa AES-128:", key);
 console.log("Danh sách mã PIN gốc:", plainPins);
 console.log("Danh sách mã PIN đã mã hóa (hex):", encryptedPinHex);
 console.log("Danh sách mã PIN đã mã hóa (base64):", encryptedPins);
@@ -181,40 +205,6 @@ function validatePin() {
     });
 }
 
-function confirmPin() {
-    const decryptedPin = document
-        .getElementById("decrypt-result")
-        .innerText.replace("Decrypted PIN: ", "");
-
-    // Show loading spinner
-    document.getElementById("loading").style.display = "block";
-
-    // Simulate a delay for the server check
-    setTimeout(() => {
-        // Hide loading spinner
-        document.getElementById("loading").style.display = "none";
-
-        if (validateEncryptedPin(decryptedPin)) {
-            alert("PIN xác thực thành công!");
-            document
-                .querySelector('.list-group-item[data-tab="withdraw"]')
-                .classList.remove("hidden");
-            loadContent("withdraw.html").then(() => {
-                showTab("withdraw");
-            });
-        } else {
-            alert("PIN không hợp lệ. Vui lòng thử lại.");
-            // Hide the decrypt tab from the sidebar
-            document
-                .querySelector('.list-group-item[data-tab="decrypt"]')
-                .classList.add("hidden");
-            loadContent("pin-entry.html").then(() => {
-                showTab("pin-entry");
-            });
-        }
-    }, 2000); // 2 seconds delay to simulate server response time
-}
-
 function encryptPin(pin) {
     const encrypted = CryptoJS.AES.encrypt(
         CryptoJS.enc.Utf8.parse(pin),
@@ -258,7 +248,39 @@ function decryptPin() {
     }
 }
 
+function confirmPin() {
+    const decryptedPin = document
+        .getElementById("decrypt-result")
+        .innerText.replace("Decrypted PIN: ", "");
 
+    // Show loading spinner
+    document.getElementById("loading").style.display = "block";
+
+    // Simulate a delay for the server check
+    setTimeout(() => {
+        // Hide loading spinner
+        document.getElementById("loading").style.display = "none";
+
+        if (validateEncryptedPin(decryptedPin)) {
+            alert("PIN xác thực thành công!");
+            document
+                .querySelector('.list-group-item[data-tab="withdraw"]')
+                .classList.remove("hidden");
+            loadContent("withdraw.html").then(() => {
+                showTab("withdraw");
+            });
+        } else {
+            alert("PIN không hợp lệ. Vui lòng thử lại.");
+            // Hide the decrypt tab from the sidebar
+            document
+                .querySelector('.list-group-item[data-tab="decrypt"]')
+                .classList.add("hidden");
+            loadContent("pin-entry.html").then(() => {
+                showTab("pin-entry");
+            });
+        }
+    }, 2000); // 2 seconds delay to simulate server response time
+}
 
 function withdrawMoney() {
     const amount = document.getElementById("amount").value;
@@ -294,6 +316,7 @@ function resetAtmUI() {
     // Reset dynamic content
     document.getElementById("dynamic-content").innerHTML = "";
     // Optionally reset form fields and other states here if necessary
+    dynamicKey = generateDynamicKey(); // Generate a new dynamic key for the new session
 }
 
 function startSessionTimeout() {

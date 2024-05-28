@@ -6,17 +6,28 @@
         <title>ATM PIN</title>
         <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
         <link rel="stylesheet" href="styles.css" />
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+            rel="stylesheet"
+        />
     </head>
     <body class="bg-blue-900 text-white font-sans">
-        <div id="atm-container" class="flex items-center justify-center h-screen">
-            <div id="atm-slot" class="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+        <div
+            id="atm-container"
+            class="flex items-center justify-center h-screen"
+        >
+            <div
+                id="atm-slot"
+                class="bg-gray-800 p-6 rounded-lg shadow-lg text-center"
+            >
                 <p class="text-white mb-4">Insert your card</p>
                 <div
                     id="atm-card"
                     class="bg-gradient-to-r from-green-400 to-blue-500 text-gray-800 p-6 rounded-lg shadow-md cursor-pointer flex flex-col items-center justify-center transform hover:scale-105 transition-transform"
                 >
-                    <div class="chip w-16 h-12 bg-yellow-400 mb-4 rounded-lg"></div>
+                    <div
+                        class="chip w-16 h-12 bg-yellow-400 mb-4 rounded-lg"
+                    ></div>
                     <p class="font-bold text-2xl text-white">ATM Card</p>
                 </div>
             </div>
@@ -24,14 +35,36 @@
         <div id="main-content" class="hidden">
             <div class="flex h-screen overflow-hidden">
                 <div class="bg-gray-800 w-64 flex-shrink-0 shadow-lg">
-                    <div class="p-4 text-2xl font-bold border-b border-gray-700">ATM PIN</div>
+                    <div
+                        class="p-4 text-2xl font-bold border-b border-gray-700"
+                    >
+                        ATM PIN
+                    </div>
                     <nav class="mt-10">
-                        <a href="#" class="list-group-item block py-2.5 px-4 rounded transition duration-200 hover:bg-purple-700" data-tab="pin-entry">Enter PIN</a>
-                        <a href="#" class="list-group-item block py-2.5 px-4 rounded transition duration-200 hover:bg-pink-700 hidden" data-tab="decrypt">Decrypt PIN</a>
-                        <a href="#" class="list-group-item block py-2.5 px-4 rounded transition duration-200 hover:bg-green-700 hidden" data-tab="withdraw">Withdraw Money</a>
+                        <a
+                            href="#"
+                            class="list-group-item block py-2.5 px-4 rounded transition duration-200 hover:bg-purple-700"
+                            data-tab="pin-entry"
+                            >Enter PIN</a
+                        >
+                        <a
+                            href="#"
+                            class="list-group-item block py-2.5 px-4 rounded transition duration-200 hover:bg-pink-700 hidden"
+                            data-tab="decrypt"
+                            >Decrypt PIN</a
+                        >
+                        <a
+                            href="#"
+                            class="list-group-item block py-2.5 px-4 rounded transition duration-200 hover:bg-green-700 hidden"
+                            data-tab="withdraw"
+                            >Withdraw Money</a
+                        >
                     </nav>
                 </div>
-                <div class="flex-grow bg-gray-900 p-6 overflow-auto shadow-lg rounded-lg" id="dynamic-content">
+                <div
+                    class="flex-grow bg-gray-900 p-6 overflow-auto shadow-lg rounded-lg"
+                    id="dynamic-content"
+                >
                     <!-- Dynamic content will be loaded here -->
                 </div>
             </div>
